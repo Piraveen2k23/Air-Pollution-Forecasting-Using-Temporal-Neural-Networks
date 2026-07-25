@@ -1,0 +1,2 @@
+# Air-Pollution-Forecasting-Using-Temporal-Neural-Networks
+The project uses the Beijing Multi-Site Air Quality Dataset from the UCI Machine Learning Repository, which contains hourly measurements of pollutants (PM2.5, PM10, SO₂, NO₂, CO, O₃) and meteorological variables (temperature, pressure, humidity, wind direction and speed) from 12 monitoring stations in Beijing, covering March 2013 to February 2017. 
