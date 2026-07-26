@@ -37,10 +37,10 @@ from torch.utils.data import DataLoader, TensorDataset
 # ─────────────────────────────────────────────────────────────────────────────
 # HYPERPARAMETERS
 # ─────────────────────────────────────────────────────────────────────────────
-NUM_CHANNELS  = 64     # number of convolution filters in each layer (width of network)
-KERNEL_SIZE   = 3      # how many consecutive (or dilated) timesteps each filter covers
+NUM_CHANNELS  = 128     # number of convolution filters in each layer (width of network)
+KERNEL_SIZE   = 5      # how many consecutive (or dilated) timesteps each filter covers
 NUM_LEVELS    = 4      # number of TCN blocks — dilation doubles each block: 1,2,4,8
-DROPOUT       = 0.2    # fraction of neurons randomly zeroed (prevents overfitting)
+DROPOUT       = 0.3    # fraction of neurons randomly zeroed (prevents overfitting)
 BATCH_SIZE    = 512    # examples per gradient update
 LEARNING_RATE = 1e-3   # step size for weight updates
 NUM_EPOCHS    = 30     # max training passes through the full data
