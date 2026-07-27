@@ -37,7 +37,7 @@ from torch.utils.data import DataLoader, TensorDataset
 # ─────────────────────────────────────────────────────────────────────────────
 # HYPERPARAMETERS
 # ─────────────────────────────────────────────────────────────────────────────
-NUM_CHANNELS  = 128     # number of convolution filters in each layer (width of network)
+NUM_CHANNELS  = 256     # number of convolution filters in each layer (width of network)
 KERNEL_SIZE   = 5      # how many consecutive (or dilated) timesteps each filter covers
 NUM_LEVELS    = 4      # number of TCN blocks — dilation doubles each block: 1,2,4,8
 DROPOUT       = 0.3    # fraction of neurons randomly zeroed (prevents overfitting)
@@ -262,7 +262,7 @@ print(f"\n  Total trainable parameters: {total_params:,}")
 # STEP 4 — Loss function and optimizer
 # ─────────────────────────────────────────────────────────────────────────────
 loss_fn   = nn.MSELoss()
-optimizer = torch.optim.Adam(model.parameters(), lr=LEARNING_RATE)
+optimizer = torch.optim.Adam(model.parameters(), lr=LEARNING_RATE, weight_decay=1e-5)
 scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
     optimizer, mode="min", factor=0.5, patience=3
 )

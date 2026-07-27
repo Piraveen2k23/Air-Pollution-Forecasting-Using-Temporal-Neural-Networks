@@ -18,8 +18,8 @@ import torch.nn.functional as F
 # ─────────────────────────────────────────────────────────────────────────────
 WINDOW        = 24     # must match what windowing.py used when training
 
-NUM_CHANNELS  = 128    # updated to match best_tcn.pt (was 64)
-KERNEL_SIZE   = 3
+NUM_CHANNELS  = 256    # updated to match best_tcn.pt
+KERNEL_SIZE   = 5
 NUM_LEVELS    = 4
 DROPOUT       = 0.3    # updated to match best_tcn.pt (was 0.2)
 
@@ -28,12 +28,8 @@ FITTED_PATH   = "fitted_preprocessing.pkl"
 FEATURE_PATH  = "feature_cols.pkl"
 OUTPUT_PATH   = "submission_tcn.csv"
 
-TEST_RAW_CSV  = (r"c:\Users\abdul\.cache\kagglehub\competitions"
-                 r"\co-5420-air-pollution-forecasting-using-temporal-n-ns"
-                 r"\CO5420-AirPollution\public\test_raw.csv")
-TEST_CSV      = (r"c:\Users\abdul\.cache\kagglehub\competitions"
-                 r"\co-5420-air-pollution-forecasting-using-temporal-n-ns"
-                 r"\CO5420-AirPollution\public\test.csv")
+TEST_RAW_CSV  = "test_raw.csv"
+TEST_CSV      = "test.csv"
 
 # ─────────────────────────────────────────────────────────────────────────────
 # TCN model definition — must match train_tcn.py exactly
