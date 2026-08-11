@@ -28,7 +28,7 @@ NUM_LAYERS    = 3
 DROPOUT       = 0.3
 
 MODEL_PATH    = "best_lstm_v2_seed0.pt"
-FITTED_PATH   = "fitted_preprocessing.pkl"
+FITTED_PATH   = "data/processed/fitted_preprocessing.pkl"
 FEATURE_PATH  = "feature_cols_v2.pkl"
 OUTPUT_PATH   = "submission_lstm_v2.csv"
 

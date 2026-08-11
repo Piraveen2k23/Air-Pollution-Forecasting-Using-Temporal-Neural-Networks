@@ -34,7 +34,7 @@ print("=" * 65)
 print(" Loading data ...")
 print("=" * 65)
 
-data = np.load("windows.npz", allow_pickle=True)
+data = np.load("data/processed/windows.npz", allow_pickle=True)
 X_train_full = data["X_train"]      # (N, 24, 29)
 y_train_norm = data["y_train_norm"]
 y_train_raw  = data["y_train_raw"]
@@ -42,12 +42,12 @@ X_val_full   = data["X_val"]
 y_val_norm   = data["y_val_norm"]
 y_val_raw    = data["y_val_raw"]
 
-with open("fitted_preprocessing.pkl", "rb") as f:
+with open("data/processed/fitted_preprocessing.pkl", "rb") as f:
     fitted = pickle.load(f)
 mean_pm25 = float(fitted["means"]["PM2.5"])
 std_pm25  = float(fitted["stds"]["PM2.5"])
 
-with open("feature_cols.pkl", "rb") as f:
+with open("data/processed/feature_cols.pkl", "rb") as f:
     meta = pickle.load(f)
 feature_cols = meta["feature_cols"]
 print(f"  Full feature set ({len(feature_cols)}): {feature_cols}")
@@ -148,7 +148,7 @@ print(f"\n  Pollution-Only LSTM Val RMSE: {poll_val_rmse:.3f}")
 
 # ─── Load full LSTM results for comparison ────────────────────────────────────
 try:
-    with open("lstm_results.pkl", "rb") as f:
+    with open("results/lstm_results.pkl", "rb") as f:
         lstm_res = pickle.load(f)
     full_val_rmse = lstm_res["val_rmse"]
 except FileNotFoundError:

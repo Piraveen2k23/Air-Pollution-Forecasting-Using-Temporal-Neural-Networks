@@ -56,13 +56,13 @@ print("=" * 65)
 print(" Loading data ...")
 print("=" * 65)
 
-data = np.load("windows.npz", allow_pickle=True)
+data = np.load("data/processed/windows.npz", allow_pickle=True)
 X_train   = data["X_train"]
 y_train_r = data["y_train_raw"]
 X_val     = data["X_val"]
 y_val_r   = data["y_val_raw"]
 
-with open("fitted_preprocessing.pkl", "rb") as f:
+with open("data/processed/fitted_preprocessing.pkl", "rb") as f:
     fitted = pickle.load(f)
 
 # Convert regression targets to class labels
@@ -178,7 +178,7 @@ for epoch in range(1, NUM_EPOCHS + 1):
     if val_acc > best_acc:
         best_acc   = val_acc
         best_state = {k: v.clone() for k, v in model.state_dict().items()}
-        torch.save(model.state_dict(), "best_aqi_classifier.pt")
+        torch.save(model.state_dict(), "models/best_aqi_classifier.pt")
         epochs_no_improve = 0
         status = "<-- best"
     else:
@@ -196,7 +196,7 @@ print("\n" + "=" * 65)
 print(" Final Evaluation with best weights ...")
 print("=" * 65)
 
-model.load_state_dict(torch.load("best_aqi_classifier.pt", weights_only=True))
+model.load_state_dict(torch.load("models/best_aqi_classifier.pt", weights_only=True))
 best_acc_final, y_pred_val = evaluate_acc(model, X_val_t, y_val_cls)
 
 print(f"\n  Overall Accuracy: {best_acc_final*100:.2f}%")
@@ -228,7 +228,7 @@ results = {
     "history":         history,
     "aqi_breakpoints": AQI_BREAKPOINTS[:-1],
 }
-with open("aqi_results.pkl", "wb") as f:
+with open("results/aqi_results.pkl", "wb") as f:
     pickle.dump(results, f)
 
 print(f"\n  Saved: best_aqi_classifier.pt")

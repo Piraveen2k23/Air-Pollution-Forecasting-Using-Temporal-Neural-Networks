@@ -35,15 +35,15 @@ print("=" * 65)
 print(" Loading cleaned data for window ablation ...")
 print("=" * 65)
 
-train_df = pd.read_pickle("train_clean.pkl")
-val_df   = pd.read_pickle("val_clean.pkl")
+train_df = pd.read_pickle("data/processed/train_clean.pkl")
+val_df   = pd.read_pickle("data/processed/val_clean.pkl")
 
-with open("fitted_preprocessing.pkl", "rb") as f:
+with open("data/processed/fitted_preprocessing.pkl", "rb") as f:
     fitted = pickle.load(f)
 mean_pm25 = float(fitted["means"]["PM2.5"])
 std_pm25  = float(fitted["stds"]["PM2.5"])
 
-with open("feature_cols.pkl", "rb") as f:
+with open("data/processed/feature_cols.pkl", "rb") as f:
     meta = pickle.load(f)
 feature_cols  = meta["feature_cols"]
 station_list  = meta["station_list"]
@@ -163,7 +163,7 @@ for w in WINDOW_SIZES:
     best_mark = " <-- BEST" if rmse == min(ablation_results[w2]["val_rmse"] for w2 in WINDOW_SIZES) else ""
     print(f"  {str(w)+'h':>8}  {rmse:>10.3f}{best_mark}")
 
-with open("window_ablation_results.pkl", "wb") as f:
+with open("results/window_ablation_results.pkl", "wb") as f:
     pickle.dump(ablation_results, f)
 
 print("\n  Saved: window_ablation_results.pkl")

@@ -143,7 +143,7 @@ save(fig, "model_comparison.png")
 print("[2] Generating training curve ...")
 
 try:
-    with open("lstm_results.pkl", "rb") as f:
+    with open("results/lstm_results.pkl", "rb") as f:
         lstm_res = pickle.load(f)
     history = lstm_res["history"]
     train_loss = history["train_loss"]
@@ -288,7 +288,7 @@ save(fig, "aqi_classification.png")
 print("[5] Generating predicted vs actual scatter ...")
 
 try:
-    with open("lstm_results.pkl", "rb") as f:
+    with open("results/lstm_results.pkl", "rb") as f:
         lstm_res = pickle.load(f)
     y_true = lstm_res["y_val_raw"]
     y_pred = lstm_res["val_pred_raw"]

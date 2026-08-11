@@ -17,7 +17,7 @@ import pandas as pd
 import numpy as np
 import pickle
 
-RAW_PATH = "train_raw.csv"
+RAW_PATH = "data/raw/train_raw.csv"
 VAL_START = "2015-09-01"   # last ~6 months of the 3-year train file held out for validation
 
 POLLUTANTS = ['PM2.5', 'PM10', 'SO2', 'NO2', 'CO', 'O3']
@@ -119,7 +119,7 @@ def run_pipeline():
         'stds': stds,
         'deg_map': DEG_MAP,
     }
-    with open('fitted_preprocessing.pkl', 'wb') as f:
+    with open('data/processed/fitted_preprocessing.pkl', 'wb') as f:
         pickle.dump(fitted, f)
 
     return train_df, val_df, fitted
@@ -141,6 +141,6 @@ if __name__ == '__main__':
     print("PM2.5_norm stats (train):", train_df['PM2.5_norm'].mean().round(4), train_df['PM2.5_norm'].std().round(4))
     print("PM2.5_norm stats (val):  ", val_df['PM2.5_norm'].mean().round(4), val_df['PM2.5_norm'].std().round(4))
 
-    train_df.to_pickle('train_clean.pkl')
-    val_df.to_pickle('val_clean.pkl')
+    train_df.to_pickle('data/processed/train_clean.pkl')
+    val_df.to_pickle('data/processed/val_clean.pkl')
     print("\nSaved train_clean.pkl, val_clean.pkl, fitted_preprocessing.pkl")

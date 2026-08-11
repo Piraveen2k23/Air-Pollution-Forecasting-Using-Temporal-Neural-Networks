@@ -35,8 +35,8 @@ PATIENCE      = 5       # stop if val RMSE doesn't improve for 5 epochs
 SEED_COUNT    = 1       # CPU: train 1 seed only (saves 2/3 of time vs 3 seeds)
 HUBER_DELTA   = 1.0     # Huber loss delta — transition between L1 and L2 regime
 
-WINDOWS_FILE  = "windows_v2.npz"
-FITTED_PATH   = "fitted_preprocessing.pkl"
+WINDOWS_FILE  = "data/processed/windows_v2.npz"
+FITTED_PATH   = "data/processed/fitted_preprocessing.pkl"
 
 # ─────────────────────────────────────────────────────────────────────────────
 # STEP 1 — Load data
@@ -255,7 +255,7 @@ for seed in range(SEED_COUNT):
             break
 
     # Save best weights
-    save_path = f"best_lstm_v2_seed{seed}.pt"
+    save_path = f"models/best_lstm_v2_seed{seed}.pt"
     torch.save(best_weights, save_path)
     print(f"\n  Seed {seed} best val RMSE: {best_val_rmse:.3f} → saved {save_path}")
 
@@ -278,7 +278,7 @@ print(f"  Val RMSE (seed 0) : {float(np.sqrt(np.mean((all_seed_val_preds[0] - y_
 print(f"\n  Previous best     : 14.878 (LSTM 70% + TCN 30% on 24h windows)")
 print("=" * 65)
 
-with open("lstm_v2_results.pkl", "wb") as f:
+with open("results/lstm_v2_results.pkl", "wb") as f:
     pickle.dump({
         "val_pred_raw":     all_seed_val_preds[0],
         "val_pred_ensemble": ensemble_preds,

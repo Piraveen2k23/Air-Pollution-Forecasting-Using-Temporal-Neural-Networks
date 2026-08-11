@@ -33,7 +33,7 @@ import pickle
 # CONFIG
 # ─────────────────────────────────────────────────────────────────────────────
 WINDOW      = 48          # 48-hour context window (was 24)
-OUTPUT_NPZ  = "windows_v2.npz"
+OUTPUT_NPZ  = "data/processed/windows_v2.npz"
 OUTPUT_PKL  = "feature_cols_v2.pkl"
 
 POLLUTANTS_NORM = ['PM2.5_norm', 'PM10_norm', 'SO2_norm', 'NO2_norm', 'CO_norm', 'O3_norm']
@@ -49,8 +49,8 @@ print("=" * 65)
 # STEP 1 — Load cleaned DataFrames
 # ─────────────────────────────────────────────────────────────────────────────
 print("\n[1/5] Loading train_clean.pkl and val_clean.pkl ...")
-train_df = pd.read_pickle("train_clean.pkl")
-val_df   = pd.read_pickle("val_clean.pkl")
+train_df = pd.read_pickle("data/processed/train_clean.pkl")
+val_df   = pd.read_pickle("data/processed/val_clean.pkl")
 
 print(f"  train_df : {train_df.shape}")
 print(f"  val_df   : {val_df.shape}")

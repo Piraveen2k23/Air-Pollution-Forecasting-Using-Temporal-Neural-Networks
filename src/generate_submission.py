@@ -27,12 +27,12 @@ import torch.nn as nn
 # ─────────────────────────────────────────────────────────────────────────────
 # Paths
 # ─────────────────────────────────────────────────────────────────────────────
-TEST_CSV      = "test_raw.csv"
-SAMPLE_SUB    = "sample_submission.csv"
-MODEL_PATH    = "best_lstm.pt"
-FITTED_PATH   = "fitted_preprocessing.pkl"
-FEATURE_PATH  = "feature_cols.pkl"
-OUTPUT_PATH   = "submission.csv"
+TEST_CSV      = "data/raw/test_raw.csv"
+SAMPLE_SUB    = "submissions/sample_submission.csv"
+MODEL_PATH    = "models/best_lstm.pt"
+FITTED_PATH   = "data/processed/fitted_preprocessing.pkl"
+FEATURE_PATH  = "data/processed/feature_cols.pkl"
+OUTPUT_PATH   = "submissions/submission.csv"
 
 class LSTMForecaster(nn.Module):
     def __init__(self, input_size, hidden_size, num_layers, dropout):
@@ -169,7 +169,7 @@ print("=" * 60)
 # submission IDs.
 
 # Load test.csv (the structured file with IDs and context columns)
-test_structured = pd.read_csv("test.csv")
+test_structured = pd.read_csv("data/raw/test.csv")
 print(f"  test.csv shape: {test_structured.shape}")
 print(f"  test.csv columns (first 5): {list(test_structured.columns[:5])}")
 

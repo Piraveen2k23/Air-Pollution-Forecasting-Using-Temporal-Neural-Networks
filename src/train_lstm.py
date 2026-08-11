@@ -44,7 +44,7 @@ print("=" * 65)
 print(" STEP 1: Loading data from windows.npz ...")
 print("=" * 65)
 
-data = np.load("windows.npz", allow_pickle=True)
+data = np.load("data/processed/windows.npz", allow_pickle=True)
 
 # X_train shape: (262944, 24, 29)  — 262k examples, 24 hours, 29 features each
 # y_train_norm  — normalized PM2.5 targets (what the model directly predicts)
@@ -59,7 +59,7 @@ y_val_raw    = data["y_val_raw"]      # shape (N_val,)
 
 # Load the mean and std of PM2.5 (from training data only).
 # We need these to convert normalized predictions → real μg/m³ for RMSE.
-with open("fitted_preprocessing.pkl", "rb") as f:
+with open("data/processed/fitted_preprocessing.pkl", "rb") as f:
     fitted = pickle.load(f)
 mean_pm25 = float(fitted["means"]["PM2.5"])
 std_pm25  = float(fitted["stds"]["PM2.5"])
@@ -285,7 +285,7 @@ for epoch in range(1, NUM_EPOCHS + 1):
     # ── Early stopping + best model saving ───────────────────────────────────
     if val_rmse < best_val_rmse:
         best_val_rmse = val_rmse
-        torch.save(model.state_dict(), "best_lstm.pt")   # save weights to disk
+        torch.save(model.state_dict(), "models/best_lstm.pt")   # save weights to disk
         epochs_no_improve = 0
         status = "<-- best"
     else:
@@ -305,7 +305,7 @@ print("\n" + "=" * 65)
 print(" STEP 6: Loading best model and evaluating ...")
 print("=" * 65)
 
-model.load_state_dict(torch.load("best_lstm.pt", weights_only=True))
+model.load_state_dict(torch.load("models/best_lstm.pt", weights_only=True))
 
 train_rmse, train_pred_raw = evaluate_rmse(model, X_train_t, y_train_raw)
 val_rmse,   val_pred_raw   = evaluate_rmse(model, X_val_t,   y_val_raw)
@@ -315,7 +315,7 @@ val_mae   = float(np.mean(np.abs(val_pred_raw   - y_val_raw)))
 
 # ── Load baseline results to compare ────────────────────────────────────────
 try:
-    with open("baseline_results.pkl", "rb") as f:
+    with open("results/baseline_results.pkl", "rb") as f:
         baseline = pickle.load(f)
     persist_val_rmse = baseline["results"]["persistence_val"][0]
     ridge_val_rmse   = baseline["results"]["ridge_val"][0]
@@ -358,7 +358,7 @@ results = {
         "num_epochs":    NUM_EPOCHS,
     },
 }
-with open("lstm_results.pkl", "wb") as f:
+with open("results/lstm_results.pkl", "wb") as f:
     pickle.dump(results, f)
 
 print(f"\n  Saved: best_lstm.pt          (model weights)")

@@ -18,8 +18,8 @@ import numpy as np
 # ─────────────────────────────────────────────────────────────────────────────
 # INPUT FILES — point these to your best submissions
 # ─────────────────────────────────────────────────────────────────────────────
-LSTM_CSV = "submission.csv"            # Kaggle: 14.935 (best so far)
-TCN_CSV  = "submission_tcn.csv"        # Kaggle: 15.381
+LSTM_CSV = "submissions/submission.csv"            # Kaggle: 14.935 (best so far)
+TCN_CSV  = "submissions/submission_tcn.csv"        # Kaggle: 15.381
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Load both submission files
@@ -71,7 +71,7 @@ for w_lstm, w_tcn in weights:
     out = pd.DataFrame({'id': lstm['id'], 'PM2.5': blended})
 
     # Filename encodes the weights so you know what you're uploading
-    fname = f"submission_ensemble_lstm{int(w_lstm*100)}_tcn{int(w_tcn*100)}.csv"
+    fname = f"submissions/submission_ensemble_lstm{int(w_lstm*100)}_tcn{int(w_tcn*100)}.csv"
     out.to_csv(fname, index=False)
     generated_files.append(fname)
 

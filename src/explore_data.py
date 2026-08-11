@@ -5,8 +5,8 @@ import pandas as pd
 import numpy as np
 
 # ── Load preprocessed files ──────────────────────────────────────────────────
-train_df = pd.read_pickle('train_clean.pkl')
-val_df   = pd.read_pickle('val_clean.pkl')
+train_df = pd.read_pickle('data/processed/train_clean.pkl')
+val_df   = pd.read_pickle('data/processed/val_clean.pkl')
 
 print("=" * 70)
 print("  PREPROCESSED DATA OVERVIEW")
@@ -84,7 +84,7 @@ print("\n" + "=" * 70)
 print("  WINDOWS (model-ready arrays from windows.npz)")
 print("=" * 70)
 try:
-    data = np.load('windows.npz', allow_pickle=True)
+    data = np.load('data/processed/windows.npz', allow_pickle=True)
     X_train = data['X_train']
     X_val   = data['X_val']
     y_train = data['y_train_raw']

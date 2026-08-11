@@ -33,7 +33,7 @@ print("=" * 65)
 print(" Loading data from windows.npz ...")
 print("=" * 65)
 
-data = np.load("windows.npz", allow_pickle=True)
+data = np.load("data/processed/windows.npz", allow_pickle=True)
 X_train      = data["X_train"]
 y_train_norm = data["y_train_norm"]
 y_train_raw  = data["y_train_raw"]
@@ -41,7 +41,7 @@ X_val        = data["X_val"]
 y_val_norm   = data["y_val_norm"]
 y_val_raw    = data["y_val_raw"]
 
-with open("fitted_preprocessing.pkl", "rb") as f:
+with open("data/processed/fitted_preprocessing.pkl", "rb") as f:
     fitted = pickle.load(f)
 mean_pm25 = float(fitted["means"]["PM2.5"])
 std_pm25  = float(fitted["stds"]["PM2.5"])
@@ -125,7 +125,7 @@ for epoch in range(1, NUM_EPOCHS + 1):
     history["val_rmse"].append(val_rmse)
     if val_rmse < best_val_rmse:
         best_val_rmse = val_rmse
-        torch.save(model.state_dict(), "best_gru.pt")
+        torch.save(model.state_dict(), "models/best_gru.pt")
         epochs_no_improve = 0
         status = "<-- best"
     else:
@@ -136,12 +136,12 @@ for epoch in range(1, NUM_EPOCHS + 1):
         print(f"\n  Early stopping after epoch {epoch}.")
         break
 
-model.load_state_dict(torch.load("best_gru.pt", weights_only=True))
+model.load_state_dict(torch.load("models/best_gru.pt", weights_only=True))
 val_rmse, val_pred_raw = evaluate_rmse(model, X_val_t, y_val_raw)
 val_mae = float(np.mean(np.abs(val_pred_raw - y_val_raw)))
 
 try:
-    with open("lstm_results.pkl", "rb") as f:
+    with open("results/lstm_results.pkl", "rb") as f:
         lstm_res = pickle.load(f)
     lstm_val_rmse = lstm_res["val_rmse"]
     print(f"\n  LSTM Val RMSE: {lstm_val_rmse:.3f}   GRU Val RMSE: {val_rmse:.3f}")
@@ -155,7 +155,7 @@ results = {
     "val_pred_raw": val_pred_raw, "y_val_raw": y_val_raw,
     "history": history, "best_epoch": int(np.argmin(history["val_rmse"])) + 1,
 }
-with open("gru_results.pkl", "wb") as f:
+with open("results/gru_results.pkl", "wb") as f:
     pickle.dump(results, f)
 
 print(f"\n  Saved: best_gru.pt  gru_results.pkl")

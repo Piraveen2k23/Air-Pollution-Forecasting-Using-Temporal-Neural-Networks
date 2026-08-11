@@ -23,13 +23,13 @@ KERNEL_SIZE   = 5
 NUM_LEVELS    = 4
 DROPOUT       = 0.3    # updated to match best_tcn.pt (was 0.2)
 
-MODEL_PATH    = "best_tcn.pt"
-FITTED_PATH   = "fitted_preprocessing.pkl"
-FEATURE_PATH  = "feature_cols.pkl"
-OUTPUT_PATH   = "submission_tcn.csv"
+MODEL_PATH    = "models/best_tcn.pt"
+FITTED_PATH   = "data/processed/fitted_preprocessing.pkl"
+FEATURE_PATH  = "data/processed/feature_cols.pkl"
+OUTPUT_PATH   = "submissions/submission_tcn.csv"
 
-TEST_RAW_CSV  = "test_raw.csv"
-TEST_CSV      = "test.csv"
+TEST_RAW_CSV  = "data/raw/test_raw.csv"
+TEST_CSV      = "data/raw/test.csv"
 
 # ─────────────────────────────────────────────────────────────────────────────
 # TCN model definition — must match train_tcn.py exactly

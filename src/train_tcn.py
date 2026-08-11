@@ -54,7 +54,7 @@ print("=" * 65)
 print(" STEP 1: Loading data from windows.npz ...")
 print("=" * 65)
 
-data = np.load("windows.npz", allow_pickle=True)
+data = np.load("data/processed/windows.npz", allow_pickle=True)
 X_train      = data["X_train"]        # (262944, 24, 29)
 y_train_norm = data["y_train_norm"]   # (262944,)
 y_train_raw  = data["y_train_raw"]    # (262944,)
@@ -62,7 +62,7 @@ X_val        = data["X_val"]          # (52128,  24, 29)
 y_val_norm   = data["y_val_norm"]
 y_val_raw    = data["y_val_raw"]
 
-with open("fitted_preprocessing.pkl", "rb") as f:
+with open("data/processed/fitted_preprocessing.pkl", "rb") as f:
     fitted = pickle.load(f)
 mean_pm25 = float(fitted["means"]["PM2.5"])
 std_pm25  = float(fitted["stds"]["PM2.5"])
@@ -338,7 +338,7 @@ for epoch in range(1, NUM_EPOCHS + 1):
     # ── Early stopping + model saving ────────────────────────────────────────
     if val_rmse < best_val_rmse:
         best_val_rmse = val_rmse
-        torch.save(model.state_dict(), "best_tcn.pt")
+        torch.save(model.state_dict(), "models/best_tcn.pt")
         epochs_no_improve = 0
         status = "<-- best"
     else:
@@ -358,7 +358,7 @@ print("\n" + "=" * 65)
 print(" STEP 6: Loading best TCN and comparing to LSTM + baselines ...")
 print("=" * 65)
 
-model.load_state_dict(torch.load("best_tcn.pt", weights_only=True))
+model.load_state_dict(torch.load("models/best_tcn.pt", weights_only=True))
 
 train_rmse, _            = evaluate_rmse_batched(model, X_train_t, y_train_raw)
 val_rmse,   val_pred_raw = evaluate_rmse_batched(model, X_val_t,   y_val_raw)
@@ -367,7 +367,7 @@ val_mae   = float(np.mean(np.abs(val_pred_raw - y_val_raw)))
 
 # Load baseline results
 try:
-    with open("baseline_results.pkl", "rb") as f:
+    with open("results/baseline_results.pkl", "rb") as f:
         baseline = pickle.load(f)
     persist_rmse = baseline["results"]["persistence_val"][0]
     persist_mae  = baseline["results"]["persistence_val"][1]
@@ -379,7 +379,7 @@ except FileNotFoundError:
 
 # Load LSTM results for comparison
 try:
-    with open("lstm_results.pkl", "rb") as f:
+    with open("results/lstm_results.pkl", "rb") as f:
         lstm_res = pickle.load(f)
     lstm_rmse = lstm_res["val_rmse"]
     lstm_mae  = lstm_res["val_mae"]
@@ -423,7 +423,7 @@ results = {
         "learning_rate": LEARNING_RATE,
     },
 }
-with open("tcn_results.pkl", "wb") as f:
+with open("results/tcn_results.pkl", "wb") as f:
     pickle.dump(results, f)
 
 print(f"\n  Saved: best_tcn.pt       (model weights)")

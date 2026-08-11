@@ -79,8 +79,8 @@ def build_dataset(df, station_list, feature_cols):
 
 
 def run():
-    train_df = pd.read_pickle('train_clean.pkl')
-    val_df = pd.read_pickle('val_clean.pkl')
+    train_df = pd.read_pickle('data/processed/train_clean.pkl')
+    val_df = pd.read_pickle('data/processed/val_clean.pkl')
 
     train_df = add_calendar_cyclical(train_df)
     val_df = add_calendar_cyclical(val_df)
@@ -111,13 +111,13 @@ def run():
     print(pd.Series(st_train).value_counts())
 
     np.savez_compressed(
-        'windows.npz',
+        'data/processed/windows.npz',
         X_train=X_train, y_train_norm=y_train_norm, y_train_raw=y_train_raw,
         dt_train=dt_train.astype('datetime64[ns]').astype(np.int64), st_train=st_train,
         X_val=X_val, y_val_norm=y_val_norm, y_val_raw=y_val_raw,
         dt_val=dt_val.astype('datetime64[ns]').astype(np.int64), st_val=st_val,
     )
-    with open('feature_cols.pkl', 'wb') as f:
+    with open('data/processed/feature_cols.pkl', 'wb') as f:
         pickle.dump({'feature_cols': feature_cols, 'station_list': station_list}, f)
 
     print("\nSaved windows.npz, feature_cols.pkl")

@@ -74,12 +74,12 @@ def load_pkl(path):
         return None
 
 # ── Load all results ──────────────────────────────────────────────────────────
-lstm_res   = load_pkl("lstm_results.pkl")
-gru_res    = load_pkl("gru_results.pkl")
-win_res    = load_pkl("window_ablation_results.pkl")
+lstm_res   = load_pkl("results/lstm_results.pkl")
+gru_res    = load_pkl("results/gru_results.pkl")
+win_res    = load_pkl("results/window_ablation_results.pkl")
 fi_res     = load_pkl("feature_importance_results.pkl")
 poll_res   = load_pkl("pollution_only_results.pkl")
-aqi_res    = load_pkl("aqi_results.pkl")
+aqi_res    = load_pkl("results/aqi_results.pkl")
 
 # ─────────────────────────────────────────────────────────────────────────────
 # FIGURE 1 -- GRU vs LSTM: RMSE comparison

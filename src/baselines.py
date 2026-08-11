@@ -16,13 +16,13 @@ import numpy as np
 import pickle
 from sklearn.linear_model import Ridge
 
-data = np.load('windows.npz', allow_pickle=True)
-with open('feature_cols.pkl', 'rb') as f:
+data = np.load('data/processed/windows.npz', allow_pickle=True)
+with open('data/processed/feature_cols.pkl', 'rb') as f:
     meta = pickle.load(f)
 feature_cols = meta['feature_cols']
 pm25_idx = feature_cols.index('PM2.5_norm')
 
-with open('fitted_preprocessing.pkl', 'rb') as f:
+with open('data/processed/fitted_preprocessing.pkl', 'rb') as f:
     fitted = pickle.load(f)
 mean_pm25 = fitted['means']['PM2.5']
 std_pm25 = fitted['stds']['PM2.5']
@@ -74,7 +74,7 @@ results['ridge_train'] = report("Train", y_train_raw, ridge_train_pred)
 results['ridge_val'] = report("Validation", y_val_raw, ridge_val_pred)
 
 # save for later comparison against LSTM/TCN
-with open('baseline_results.pkl', 'wb') as f:
+with open('results/baseline_results.pkl', 'wb') as f:
     pickle.dump({
         'results': results,
         'persist_val_pred': persist_val_pred,
