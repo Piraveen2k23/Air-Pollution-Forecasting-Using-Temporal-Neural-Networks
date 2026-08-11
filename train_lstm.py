@@ -29,8 +29,8 @@ from torch.utils.data import DataLoader, TensorDataset
 # ─────────────────────────────────────────────────────────────────────────────
 # HYPERPARAMETERS  — settings you can change to experiment
 # ─────────────────────────────────────────────────────────────────────────────
-HIDDEN_SIZE  = 128    # number of memory units in each LSTM layer
-NUM_LAYERS   = 2      # how many LSTM layers to stack (depth of the network)
+HIDDEN_SIZE  = 256    # number of memory units in each LSTM layer
+NUM_LAYERS   = 3      # how many LSTM layers to stack (depth of the network)
 DROPOUT      = 0.2    # 20% of neurons randomly disabled each step (prevents overfitting)
 BATCH_SIZE   = 512    # examples processed per gradient update
 LEARNING_RATE = 1e-3  # step size for weight updates (0.001 is a good default)
@@ -141,6 +141,8 @@ class LSTMForecaster(nn.Module):
     def __init__(self, input_size, hidden_size, num_layers, dropout):
         super().__init__()
 
+        self.hidden_size = hidden_size
+
         # The LSTM layer(s).
         # batch_first=True means input shape is (batch, seq_len, features)
         # dropout applies between LSTM layers (not after the last one)
@@ -155,20 +157,17 @@ class LSTMForecaster(nn.Module):
         # Dropout applied after the LSTM's last layer output
         self.dropout = nn.Dropout(dropout)
 
-        # A simple linear (fully connected) layer: 128 numbers → 1 number
+        # A simple linear (fully connected) layer: hidden_size → 1 number
         self.fc = nn.Linear(hidden_size, 1)
 
     def forward(self, x):
         # x shape: (batch_size, 24, 29)
 
         # Pass through LSTM.
-        # out shape: (batch_size, 24, hidden_size) — output at every timestep
-        # _  : (hidden state, cell state) — we don't need them here
+        # out shape: (batch_size, 24, hidden_size)
         out, _ = self.lstm(x)
 
-        # We only care about the LAST timestep (hour 24).
-        # It has "seen" all 24 hours thanks to the LSTM's memory.
-        # last shape: (batch_size, hidden_size)
+        # Take the last timestep's output
         last = out[:, -1, :]
 
         # Apply dropout for regularization
@@ -204,7 +203,7 @@ print(f"\n  Total trainable parameters: {total_params:,}")
 #   weight individually based on recent gradient history. Very popular default.
 
 loss_fn   = nn.MSELoss()
-optimizer = torch.optim.Adam(model.parameters(), lr=LEARNING_RATE)
+optimizer = torch.optim.Adam(model.parameters(), lr=LEARNING_RATE, weight_decay=1e-5)
 
 # Learning rate scheduler: if val loss plateaus, reduce LR by half.
 # This helps squeeze out the last few percent of performance.
@@ -224,11 +223,16 @@ print(f"  {'Epoch':>5}  {'Train Loss':>12}  {'Val RMSE':>10}  {'Time':>8}  {'Sta
 print(f"  {'-'*5}  {'-'*12}  {'-'*10}  {'-'*8}  {'-'*10}")
 
 # Helper: compute RMSE on validation set in real μg/m³ units
-def evaluate_rmse(model, X_tensor, y_raw):
-    """Run model on full X_tensor (no gradient), return RMSE vs y_raw (real units)."""
+def evaluate_rmse(model, X_tensor, y_raw, batch_size=1024):
+    """Run model on full X_tensor in batches (no gradient), return RMSE vs y_raw (real units)."""
     model.eval()
+    all_preds = []
     with torch.no_grad():
-        pred_norm = model(X_tensor.to(device)).cpu().numpy()
+        for i in range(0, len(X_tensor), batch_size):
+            batch = X_tensor[i:i + batch_size].to(device)
+            pred = model(batch).cpu().numpy()
+            all_preds.append(pred)
+    pred_norm = np.concatenate(all_preds)
     pred_raw = pred_norm * std_pm25 + mean_pm25    # un-normalize
     rmse = float(np.sqrt(np.mean((pred_raw - y_raw) ** 2)))
     return rmse, pred_raw

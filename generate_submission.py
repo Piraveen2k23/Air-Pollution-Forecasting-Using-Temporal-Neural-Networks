@@ -27,16 +27,13 @@ import torch.nn as nn
 # ─────────────────────────────────────────────────────────────────────────────
 # Paths
 # ─────────────────────────────────────────────────────────────────────────────
-TEST_CSV      = r"c:\Users\abdul\.cache\kagglehub\competitions\co-5420-air-pollution-forecasting-using-temporal-n-ns\CO5420-AirPollution\public\test_raw.csv"
+TEST_CSV      = "test_raw.csv"
 SAMPLE_SUB    = "sample_submission.csv"
 MODEL_PATH    = "best_lstm.pt"
 FITTED_PATH   = "fitted_preprocessing.pkl"
 FEATURE_PATH  = "feature_cols.pkl"
 OUTPUT_PATH   = "submission.csv"
 
-# ─────────────────────────────────────────────────────────────────────────────
-# LSTM model definition  (must match train_lstm.py exactly)
-# ─────────────────────────────────────────────────────────────────────────────
 class LSTMForecaster(nn.Module):
     def __init__(self, input_size, hidden_size, num_layers, dropout):
         super().__init__()
@@ -63,8 +60,8 @@ POLLUTANTS   = ['PM2.5', 'PM10', 'SO2', 'NO2', 'CO', 'O3']
 WEATHER      = ['TEMP', 'PRES', 'DEWP', 'RAIN', 'WSPM']
 NUMERIC_COLS = POLLUTANTS + WEATHER
 WINDOW       = 24
-HIDDEN_SIZE  = 128
-NUM_LAYERS   = 2
+HIDDEN_SIZE  = 256
+NUM_LAYERS   = 3
 DROPOUT      = 0.2
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -172,9 +169,7 @@ print("=" * 60)
 # submission IDs.
 
 # Load test.csv (the structured file with IDs and context columns)
-test_structured = pd.read_csv(
-    r"c:\Users\abdul\.cache\kagglehub\competitions\co-5420-air-pollution-forecasting-using-temporal-n-ns\CO5420-AirPollution\public\test.csv"
-)
+test_structured = pd.read_csv("test.csv")
 print(f"  test.csv shape: {test_structured.shape}")
 print(f"  test.csv columns (first 5): {list(test_structured.columns[:5])}")
 
